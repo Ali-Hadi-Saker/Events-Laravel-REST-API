@@ -16,7 +16,7 @@ class EventSeeder extends Seeder
     {
         $users = User::all();//get all users from dbs
 
-        for ($i = 0 ; $i < 200; $i++) {
+        for ($i = 0 ; $i < 200; $i++) {//create 200 events
             $user = $users->random();//get a random user from list of users
             Event::factory()->create([
                 'user_id' => $user->id

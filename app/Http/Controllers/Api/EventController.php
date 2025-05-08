@@ -25,7 +25,7 @@ class EventController extends Controller
             ...$request->validate([//spread operator to copy all elements of the array to the create array
                 'name' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'start_date' => 'required|date',
+                'start_time' => 'required|date',
                 'end_time' => 'required|date|after:start_time'
             ]),
             'user_id' => 1

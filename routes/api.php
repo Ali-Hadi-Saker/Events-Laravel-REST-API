@@ -12,7 +12,7 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('events', EventController::class);
 
-//Laravel will only look for an attendee that belongs to the given even
+//Laravel will only look for an attendee that belongs to the given event
 //this route require 2 parameters (event and attendee)
 Route::apiResource('events.attendees', AttendeeController::class)
-        ->scoped(['attendee' => 'event']);
+        ->scoped();//every attendee is part of an event

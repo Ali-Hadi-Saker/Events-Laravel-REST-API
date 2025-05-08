@@ -14,7 +14,8 @@ class EventController extends Controller
      */
     public function index()
     {   //ecentResource to return data as json format
-        return EventResource::collection(Event::all());
+        //using with('user')->get() will use userResource and returned user with the event
+        return EventResource::collection(Event::with('user')->get());
     }
 
     /**
@@ -40,6 +41,8 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        //UserResource and AttendeeResource r used to display user and attendees when returning an event
+        $event->load('user', 'attendees');
         return new EventResource($event);
     }
 

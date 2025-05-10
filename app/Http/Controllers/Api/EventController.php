@@ -13,9 +13,37 @@ class EventController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   //ecentResource to return data as json format
-        //using with('user')->get() will use userResource and returned user with the event
-        return EventResource::collection(Event::with('user')->get());
+    {   
+        $query = Event::query();//query builder for the event model
+        $relations = ['user', 'attendees', 'attendees.user'];
+
+        foreach ($relations as $relation) {
+            $query->when(//when first parameter is true do the callback function
+                $this->shouldIncludeRelation($relation), 
+                fn($q) => $q->with($relation));
+        }
+
+        //eventResource to return data as json format
+        return EventResource::collection(
+            $query->latest()->paginate()
+        );
+
+
+    }
+
+    //function to check the included relation from query
+    protected function shouldIncludeRelation(string $relation): bool {
+
+        $include = request()->query('include');//retrive the value of include from query
+
+        if(!$include) {
+            return false;
+        }
+
+        //explode method transform a string into array
+        //array_map run trim function over each element of the generated array by expode
+        $relations = array_map('trim', explode(',', $include));
+        return in_array($relation, $relations);
     }
 
     /**
